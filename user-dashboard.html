@@ -205,6 +205,28 @@
             <p class="text-gray-500 dark:text-gray-300 text-sm">Please wait while we fetch your data.</p>
         </div>
     </div>
+    
+    <!-- System Deprecation Modal -->
+    <div id="systemDeprecationModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
+        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 flex flex-col items-center max-w-md mx-4 text-center">
+            <div class="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mb-6">
+                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-600 dark:text-red-400"></i>
+            </div>
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Important Notice</h2>
+            <div class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-6">
+                <p class="mb-3">This system will be unusable after <span class="font-bold text-red-600 dark:text-red-400">August 22, 2025 5:00 PM</span>.</p>
+                <p class="mb-3">Please proceed to this link for the updated system:</p>
+                <a href="https://r7tesda-nexus-suite.vercel.app/" target="_blank" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline break-all">
+                    https://r7tesda-nexus-suite.vercel.app/
+                </a>
+                <p class="mt-3">We apologize for the inconvenience. Please unpin it from your taskbars.</p>
+            </div>
+            <button id="deprecationModalClose" class="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200 hover:scale-105">
+                I Understand
+            </button>
+        </div>
+    </div>
+    
     <!-- Error Message -->
     <div id="errorMessage" class="hidden fixed top-6 right-6 p-5 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 text-red-800 dark:text-red-200 rounded-xl shadow-2xl z-50 text-base font-semibold"></div>
     <!-- Receive Modal -->
@@ -312,6 +334,10 @@
                 // Update welcome message based on department
                 updateWelcomeMessage(userData.department);
             }
+            
+            // Show system deprecation modal upon login
+            showSystemDeprecationModal();
+            
             // Real-time memos listener
             if (memosUnsubscribe) memosUnsubscribe();
             loadingModal.classList.remove('hidden');
@@ -358,6 +384,32 @@
             }
             
             welcomeMessage.textContent = message;
+        }
+
+        // Function to show system deprecation modal
+        function showSystemDeprecationModal() {
+            const modal = document.getElementById('systemDeprecationModal');
+            modal.classList.remove('hidden');
+            
+            // Add event listener for close button
+            const closeBtn = document.getElementById('deprecationModalClose');
+            closeBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    modal.classList.add('hidden');
+                }
+            });
         }
 
         // Filter memos based on search input
